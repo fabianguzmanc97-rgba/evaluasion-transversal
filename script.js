@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const cuerpoModal = document.getElementById('cuerpoModal');
     const btnConfirmarGuardar = document.getElementById('btnConfirmarGuardar');
 
-   let usuarios = [
+    let usuarios = [
         {
             nombre: 'Fabian',
             apellido: 'Guzman',
@@ -27,6 +27,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let nuevoUsuarioTemp = null;
 
+    function formatearFecha(fechaStr) {
+        if (!fechaStr) return '';
+        let partes = fechaStr.split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        return fechaStr;
+    }
+
     function mostrarUsuarios() {
         contenedorUsuarios.innerHTML = '';
 
@@ -46,10 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             <i class="bi bi-envelope text-primary me-2"></i><small>${u.correo}</small>
                         </p>
                         <p class="card-text text-muted mb-1">
-                            <i class="bi bi-calendar-date text-primary me-2"></i><small>Nacimiento: ${u.fechaNacimiento}</small>
+                            <i class="bi bi-calendar-date text-primary me-2"></i><small>Nacimiento: ${formatearFecha(u.fechaNacimiento)}</small>
                         </p>
                         <p class="card-text text-muted mb-3">
-                            <i class="bi bi-briefcase text-primary me-2"></i><small>Ingreso: ${u.fechaIngreso}</small>
+                            <i class="bi bi-briefcase text-primary me-2"></i><small>Ingreso: ${formatearFecha(u.fechaIngreso)}</small>
                         </p>
                         <button class="btn btn-outline-danger btn-sm mt-auto w-100" onclick="borrarUsuario(${i})">
                             <i class="bi bi-trash me-1"></i>Eliminar Trabajador
@@ -102,8 +111,11 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        let fechaNac = new Date(fechaNacimiento.value);
-        let fechaIng = new Date(fechaIngreso.value);
+        let partesNac = fechaNacimiento.value.split('-');
+        let partesIng = fechaIngreso.value.split('-');
+
+        let fechaNac = new Date(partesNac[0], partesNac[1] - 1, partesNac[2]);
+        let fechaIng = new Date(partesIng[0], partesIng[1] - 1, partesIng[2]);
 
         let edadAnios = fechaIng.getFullYear() - fechaNac.getFullYear();
         let mes = fechaIng.getMonth() - fechaNac.getMonth();
@@ -133,8 +145,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <li class="list-group-item"><strong>Nombre:</strong> ${nuevoUsuarioTemp.nombre} ${nuevoUsuarioTemp.apellido}</li>
                 <li class="list-group-item"><strong>Cargo:</strong> ${nuevoUsuarioTemp.cargo}</li>
                 <li class="list-group-item"><strong>Correo:</strong> ${nuevoUsuarioTemp.correo}</li>
-                <li class="list-group-item"><strong>F. Nacimiento:</strong> ${nuevoUsuarioTemp.fechaNacimiento}</li>
-                <li class="list-group-item"><strong>F. Ingreso:</strong> ${nuevoUsuarioTemp.fechaIngreso}</li>
+                <li class="list-group-item"><strong>F. Nacimiento:</strong> ${formatearFecha(nuevoUsuarioTemp.fechaNacimiento)}</li>
+                <li class="list-group-item"><strong>F. Ingreso:</strong> ${formatearFecha(nuevoUsuarioTemp.fechaIngreso)}</li>
             </ul>
         `;
 
